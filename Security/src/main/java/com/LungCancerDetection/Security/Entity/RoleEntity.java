@@ -1,6 +1,6 @@
 package com.LungCancerDetection.Security.Entity;
 
-import com.LungCancerDetection.Security.RoleType;
+import com.LungCancerDetection.Security.Enums.RoleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

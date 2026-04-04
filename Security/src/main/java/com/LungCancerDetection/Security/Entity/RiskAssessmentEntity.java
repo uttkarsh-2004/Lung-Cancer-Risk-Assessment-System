@@ -1,6 +1,6 @@
 package com.LungCancerDetection.Security.Entity;
 
-import com.LungCancerDetection.Security.RiskLevel;
+import com.LungCancerDetection.Security.Enums.RiskLevel;
 import jakarta.persistence.*;
 import lombok.*;
 

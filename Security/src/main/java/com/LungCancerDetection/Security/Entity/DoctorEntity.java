@@ -19,6 +19,7 @@ public class DoctorEntity {
 
     private String name;
     private String specialization;
+    private Double consultationFee;
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")

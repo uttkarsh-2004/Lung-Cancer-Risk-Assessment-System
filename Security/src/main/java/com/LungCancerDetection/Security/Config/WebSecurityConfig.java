@@ -2,7 +2,7 @@ package com.LungCancerDetection.Security.Config;
 
 import com.LungCancerDetection.Security.Entity.RoleEntity;
 import com.LungCancerDetection.Security.Repository.RoleRepository;
-import com.LungCancerDetection.Security.RoleType;
+import com.LungCancerDetection.Security.Enums.RoleType;
 import com.LungCancerDetection.Security.Utility.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;

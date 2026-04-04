@@ -8,7 +8,7 @@ import com.LungCancerDetection.Security.Entity.RoleEntity;
 import com.LungCancerDetection.Security.Entity.UserEntity;
 import com.LungCancerDetection.Security.Repository.RoleRepository;
 import com.LungCancerDetection.Security.Repository.UserRepository;
-import com.LungCancerDetection.Security.RoleType;
+import com.LungCancerDetection.Security.Enums.RoleType;
 import com.LungCancerDetection.Security.Utility.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

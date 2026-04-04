@@ -1,6 +1,6 @@
 package com.LungCancerDetection.Security.Entity;
 
-import com.LungCancerDetection.Security.QuestionCategory;
+import com.LungCancerDetection.Security.Enums.QuestionCategory;
 import jakarta.persistence.*;
 import lombok.*;
 

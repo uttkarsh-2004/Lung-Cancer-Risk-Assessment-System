@@ -1,4 +1,4 @@
-package com.LungCancerDetection.Security;
+package com.LungCancerDetection.Security.Enums;
 
 public enum QuestionCategory {
 

@@ -1,6 +1,6 @@
 package com.LungCancerDetection.Security.Dto;
 
-import com.LungCancerDetection.Security.QuestionCategory;
+import com.LungCancerDetection.Security.Enums.QuestionCategory;
 import lombok.Builder;
 import lombok.Data;
 

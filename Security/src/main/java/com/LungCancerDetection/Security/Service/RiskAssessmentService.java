@@ -7,7 +7,7 @@ import com.LungCancerDetection.Security.Entity.RiskAssessmentEntity;
 import com.LungCancerDetection.Security.Entity.UserEntity;
 import com.LungCancerDetection.Security.Repository.OptionRepository;
 import com.LungCancerDetection.Security.Repository.RiskAssessmentRepository;
-import com.LungCancerDetection.Security.RiskLevel;
+import com.LungCancerDetection.Security.Enums.RiskLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -95,60 +95,37 @@ public class RiskAssessmentService {
         for (AnswerDto ans : answers) {
             OptionEntity option = optionRepository.findById(ans.getOptionId()).orElseThrow();
 
-            insights.append("- ")
-                    .append(option.getQuestion().getQuestionText())
-                    .append(": ")
-                    .append(option.getOptionText())
-                    .append("\n");
+            String category = option.getQuestion().getCategory().name();
+
+            insights.append("- Category: ").append(category).append("\n")
+                    .append("  Question: ").append(option.getQuestion().getQuestionText()).append("\n")
+                    .append("  Answer: ").append(option.getOptionText()).append("\n")
+                    .append("  Score Impact: ").append(option.getScore()).append("\n\n");
         }
 
         String prompt = """
-You are a smart and responsible medical assistant.
+You are a medical assistant analyzing lung cancer risk.
 
-User Lung Cancer Risk Assessment:
-- Risk Level: %s
-- Risk Percentage: %.2f%%
+Risk:
+- Level: %s
+- Percentage: %.2f%%
 
-User Key Insights:
+Patient Data:
 %s
 
-Your task is to give a highly personalized response.
+Give a SHORT personalized response:
 
-FORMAT:
+1. Why this risk? (based on user data)
+2. Should user see a doctor?
+3. Suggested tests (if needed)
+4. Key advice (only relevant)
+5. Warning signs
 
-1. Risk Summary:
-- Explain what this risk means specifically for THIS user.
-- Avoid generic definitions.
-
-2. Doctor Consultation:
-- LOW → Usually No (unless symptoms present)
-- MEDIUM → Suggest check-up
-- HIGH → Strongly recommend doctor
-- Justify based on user data
-
-3. Recommended Tests:
-- LOW → Avoid unnecessary tests
-- MEDIUM → Basic screening
-- HIGH → Immediate diagnostic tests
-
-4. Personalized Lifestyle Advice:
-- ONLY suggest what is relevant:
-  - If smoker → quitting advice
-  - If no smoking → DO NOT mention smoking
-  - If symptoms present → address them
-- Avoid generic advice
-
-5. Warning Signs:
-- Only relevant symptoms based on risk level
-- Avoid repeating same points
-
-IMPORTANT:
-- Do NOT repeat content
-- Do NOT give generic textbook answers
-- Keep response under 150 words
-- Make it feel like advice tailored to THIS user
-- Use a supportive and calm tone
-
+Rules:
+- Max 100 words
+- No generic lines
+- Focus only on given data
+- Be clear and direct
 """.formatted(level, percentage, insights.toString());
         String aiResponse;
         try {

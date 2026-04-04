@@ -1,7 +1,7 @@
 package com.LungCancerDetection.Security.Repository;
 
 import com.LungCancerDetection.Security.Entity.RoleEntity;
-import com.LungCancerDetection.Security.RoleType;
+import com.LungCancerDetection.Security.Enums.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

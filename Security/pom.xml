@@ -67,13 +67,18 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.razorpay</groupId>
+			<artifactId>razorpay-java</artifactId>
+			<version>1.4.3</version>
+		</dependency>
+
+		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.12.6</version>
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- ✅ Lombok (FIXED) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -81,14 +86,12 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- 🤖 Spring AI (keep milestone but controlled) -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
 			<version>1.0.0-M3</version>
 		</dependency>
 
-		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -97,7 +100,7 @@
 
 	</dependencies>
 
-	<!-- ================= REPOSITORIES ================= -->
+
 	<repositories>
 		<repository>
 			<id>spring-milestones</id>
@@ -105,18 +108,18 @@
 		</repository>
 	</repositories>
 
-	<!-- ================= BUILD ================= -->
+
 	<build>
 		<plugins>
 
-			<!-- Spring Boot Plugin -->
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<!-- ❌ REMOVED Lombok exclusion -->
+
 			</plugin>
 
-			<!-- ✅ Ensure annotation processing works -->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

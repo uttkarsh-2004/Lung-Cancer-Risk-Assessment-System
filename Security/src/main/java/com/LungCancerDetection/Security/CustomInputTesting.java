@@ -2,7 +2,7 @@ package com.LungCancerDetection.Security;
 
 import com.LungCancerDetection.Security.Entity.OptionEntity;
 import com.LungCancerDetection.Security.Entity.QuestionEntity;
-import com.LungCancerDetection.Security.QuestionCategory;
+import com.LungCancerDetection.Security.Enums.QuestionCategory;
 import com.LungCancerDetection.Security.Repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

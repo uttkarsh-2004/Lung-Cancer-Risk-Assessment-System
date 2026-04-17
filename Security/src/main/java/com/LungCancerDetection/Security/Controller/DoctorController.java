@@ -34,7 +34,7 @@ public class DoctorController {
 
         return DoctorResponseDto.builder()
                 .id(doctor.getId())
-                .name(doctor.getName())
+                .doctorName(doctor.getName())
                 .specialization(doctor.getSpecialization())
                 .hospital(doctor.getHospital().getName())
                 .consultationFee(doctor.getConsultationFee())

@@ -30,8 +30,24 @@ public class AppointmentService {
                                                  LocalDate date,
                                                  LocalTime time) {
 
+        if (date.isBefore(LocalDate.now())) {
+            throw new RuntimeException("Cannot book past date");
+        }
+
+        // ✅ FIRST fetch doctor
         DoctorEntity doctor = doctorRepo.findById(doctorId)
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        // ✅ THEN check existing appointment
+        boolean exists = appointmentRepo
+                .findByDoctorAndDateAndTimeAndStatusNot(
+                        doctor, date, time, AppointmentStatus.CANCELLED
+                )
+                .isPresent();
+
+        if (exists) {
+            throw new RuntimeException("Slot already reserved");
+        }
 
         // 🔥 Check slot
         TimeSlotEntity slot = slotRepo.findByDoctorAndDate(doctor, date)
@@ -58,7 +74,13 @@ public class AppointmentService {
     }
 
     @Transactional
-    public void confirmAppointment(AppointmentEntity appointment, TimeSlotEntity slot) {
+    public void confirmAppointment(AppointmentEntity appointment) {
+
+        TimeSlotEntity slot = slotRepo.findByDoctorAndDate(appointment.getDoctor(), appointment.getDate())
+                .stream()
+                .filter(s -> s.getTime().equals(appointment.getTime()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Slot not found"));
 
         slot.setBooked(true);
         slotRepo.save(slot);

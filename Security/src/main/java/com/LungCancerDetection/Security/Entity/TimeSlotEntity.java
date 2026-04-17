@@ -14,6 +14,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Table(
         uniqueConstraints = @UniqueConstraint(columnNames = {"doctor_id", "date", "time"})
+
 )
 public class TimeSlotEntity {
 

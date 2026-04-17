@@ -2,6 +2,7 @@ package com.LungCancerDetection.Security.Service;
 
 import com.LungCancerDetection.Security.Dto.AnswerDto;
 import com.LungCancerDetection.Security.Dto.RiskAssessmentResponseDto;
+import com.LungCancerDetection.Security.Dto.RiskHistoryDto;
 import com.LungCancerDetection.Security.Entity.OptionEntity;
 import com.LungCancerDetection.Security.Entity.RiskAssessmentEntity;
 import com.LungCancerDetection.Security.Entity.UserEntity;
@@ -143,5 +144,16 @@ Rules:
                 .assessedAt(assessment.getCreatedAt())
                 .aiRecommendation(aiResponse) // NEW FIELD
                 .build();
+    }
+    public List<RiskHistoryDto> getHistory(UserEntity user) {
+
+        return riskRepo.findByUserOrderByCreatedAtDesc(user)
+                .stream()
+                .map(r -> RiskHistoryDto.builder()
+                        .percentage(r.getPercentage())
+                        .assessedAt(r.getCreatedAt())
+                        .riskLevel(r.getRiskLevel())
+                        .build()
+                ).toList();
     }
 }

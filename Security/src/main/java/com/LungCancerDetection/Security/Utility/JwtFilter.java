@@ -20,27 +20,53 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
     private final AuthUtil authUtil;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getServletPath().startsWith("/auth")){
-            filterChain.doFilter(request,response);
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+
+        // 🔹 Skip auth endpoints
+        if (request.getServletPath().startsWith("/auth")) {
+            filterChain.doFilter(request, response);
             return;
         }
 
-        final String requestTokenHeader = request.getHeader("Authorization");
-        if(requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer"))
-        {
-            filterChain.doFilter(request,response);
+        final String authHeader = request.getHeader("Authorization");
+
+        // 🔥 FIX 1: Proper Bearer check
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
             return;
         }
-        String token = requestTokenHeader.substring(7);
-        String username = authUtil.getUsernameFromToken(token);
 
-        if(username !=null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserEntity user = userRepository.findByUserName(username).orElseThrow();
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        try {
+            String token = authHeader.substring(7);
+            String username = authUtil.getUsernameFromToken(token);
+
+            System.out.println("🔍 Username from token: " + username);
+
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                UserEntity user = userRepository.findByUserName(username)
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+
+                System.out.println("🔍 Roles: " + user.getAuthorities());
+
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+
+        } catch (Exception e) {
+            System.out.println("❌ JWT ERROR: " + e.getMessage());
+
+            // 🔥 IMPORTANT: clear context if error
+            SecurityContextHolder.clearContext();
         }
-        filterChain.doFilter(request,response);
+
+        filterChain.doFilter(request, response);
     }
 }

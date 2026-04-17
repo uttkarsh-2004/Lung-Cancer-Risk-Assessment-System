@@ -1,18 +1,15 @@
 package com.LungCancerDetection.Security.Dto;
 
-
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class DoctorResponseDto {
+public class MakeDoctorRequestDto {
     private Long id;
     private String doctorName;
     private String specialization;
+    private String hospitalName;
     private String city;
     private String contactNumber;
-    private String hospital;
     private Double consultationFee;
-    private String imageUrl;
+    private String urlImage;
 }

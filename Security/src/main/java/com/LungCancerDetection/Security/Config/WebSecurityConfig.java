@@ -10,6 +10,7 @@ import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,15 +33,20 @@ public class WebSecurityConfig {
                 csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/auth/**").permitAll()
+                        .requestMatchers("/", "/auth/**").permitAll()
+
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // 🔥 FIX HERE
+                        .requestMatchers("/questions/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/questions/**").hasAnyRole("PATIENT","DOCTOR","ADMIN")
+
                         .requestMatchers("/doctor/**").hasRole("DOCTOR")
                         .requestMatchers("/patient/**").hasRole("PATIENT")
-                        .requestMatchers("/risk/**").authenticated()
 
-                        .requestMatchers("/questions/**").hasRole("PATIENT")
+                        .requestMatchers("/api/risk/**").authenticated()
+
                         .anyRequest().authenticated()
-
                 ).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 //                .formLogin(Customizer.withDefaults());
         return httpSecurity.build();
@@ -65,5 +71,7 @@ public class WebSecurityConfig {
     public ChatClient chatClient(OllamaChatModel chatModel) {
         return ChatClient.create(chatModel);
     }
+
+
 
 }

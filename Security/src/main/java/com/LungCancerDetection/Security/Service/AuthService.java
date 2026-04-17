@@ -27,6 +27,7 @@ import java.util.Set;
         private final UserRepository userRepository;
         private final PasswordEncoder passwordEncoder;
         private final RoleRepository roleRepository;
+        private final EmailService emailService;
 
         public LoginResponseDto login(LoginRequestDto loginRequestDto){
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(),loginRequestDto.getPassword()));
@@ -44,8 +45,10 @@ import java.util.Set;
             UserEntity user = new UserEntity();
             user.setUserName(signUpRequestDto.getUsername());
             user.setPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
+            user.setEmail(signUpRequestDto.getEmail());
             user.setRoles(Set.of(role));
             user = userRepository.save(user);
+            emailService.sendWelcomeEmail(user.getEmail());
             return new SignUpResponseDto(user.getUserId(),user.getUsername());
         }
 

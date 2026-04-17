@@ -50,9 +50,12 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
-    public void deleteQuestion(Long id) {
-
-        questionRepository.deleteById(id);
+    public boolean deleteQuestion(Long id) {
+        if(questionRepository.existsById(id)) {
+            questionRepository.deleteById(id);
+            return true;
+        }
+        else throw new RuntimeException("Question Id is wrong");
 
     }
 

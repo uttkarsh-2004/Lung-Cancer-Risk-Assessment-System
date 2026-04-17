@@ -20,8 +20,15 @@ public class DoctorEntity {
     private String name;
     private String specialization;
     private Double consultationFee;
+    private String city;
+    private String contactNumber;
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
     private HospitalEntity hospital;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 }

@@ -2,22 +2,48 @@ package com.LungCancerDetection.Security;
 
 import com.LungCancerDetection.Security.Entity.OptionEntity;
 import com.LungCancerDetection.Security.Entity.QuestionEntity;
+import com.LungCancerDetection.Security.Entity.RoleEntity;
+import com.LungCancerDetection.Security.Entity.UserEntity;
 import com.LungCancerDetection.Security.Enums.QuestionCategory;
+import com.LungCancerDetection.Security.Enums.RoleType;
 import com.LungCancerDetection.Security.Repository.QuestionRepository;
+import com.LungCancerDetection.Security.Repository.RoleRepository;
+import com.LungCancerDetection.Security.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Set;
 
 @Configuration
 @RequiredArgsConstructor
 public class CustomInputTesting implements CommandLineRunner {
 
+
+
     private final QuestionRepository questionRepo;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public void run(String... args) {
+        if (!userRepository.existsByUserName("admin")) {
+
+            RoleEntity adminRole = roleRepository.findByRole(RoleType.ROLE_ADMIN)
+                    .orElseGet(() -> roleRepository.save(new RoleEntity(null, RoleType.ROLE_ADMIN)));
+            UserEntity admin = new UserEntity();
+            admin.setUserName("admin");
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setRoles(Set.of(adminRole));
+
+            userRepository.save(admin);
+
+            System.out.println("✅ ADMIN CREATED: username=admin password=admin123");
+        }
 
         if(questionRepo.count() > 0) return;
 

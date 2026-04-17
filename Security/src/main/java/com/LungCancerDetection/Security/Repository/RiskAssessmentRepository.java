@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface RiskAssessmentRepository extends JpaRepository<RiskAssessmentEntity,Long> {
     List<RiskAssessmentEntity> findByUser(UserEntity user);
+    List<RiskAssessmentEntity> findByUserOrderByCreatedAtDesc(UserEntity user);
 
 }
